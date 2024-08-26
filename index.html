@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check List App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body style="background-image: url('https://www.bhmpics.com/downloads/tool-background/4.tools-background-seamless-texture-diy-and-woodworking-tools-vector-whe1rj.jpg');;">
+    <div class="container">
+        <h1>Check List</h1>
+        <div class="item-content" id="1">
+            <p>1. ล้อ</p>
+            <div class="button-group">
+                <button class="btn" data-group="1">ชำรุด</button>
+                <button class="btn" data-group="1">ปกติ</button>
+            </div>
+        </div>
+        <div class="item-content" id="2">
+            <p>2. พวงมาลัยบังคับ</p>
+            <div class="button-group">
+                <button class="btn" data-group="2">ชำรุด</button>
+                <button class="btn" data-group="2">ปกติ</button>
+            </div>
+        </div>
+        <button class="button" id="submit-btn">Submit</button>
+    </div>
+    <script>
+        function handleButtonClick(event) {
+            const clickedButton = event.target;
+            const group = clickedButton.dataset.group;
+
+            const groupButtons = document.querySelectorAll(`.btn[data-group="${group}"]`);
+
+            groupButtons.forEach(button => button.classList.remove('checked'));
+
+            clickedButton.classList.add('checked');
+        }
+
+        function handleSubmitClick() {
+            // ตรวจสอบว่าแต่ละกลุ่มมีการเลือกหรือไม่
+            const groups = document.querySelectorAll('.item-content');
+            let allSelected = true;
+
+            groups.forEach(group => {
+                const groupId = group.id;
+                const selectedButton = document.querySelector(`.btn[data-group="${groupId}"].checked`);
+                if (!selectedButton) {
+                    allSelected = false;
+                }
+            });
+
+            if (allSelected) {
+                Swal.fire({
+                    title: 'สำเร็จ!',
+                    text: 'ทำการบันทึกข้อมูลเรียบร้อย',
+                    icon: 'success',
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: "#3a363a",
+                }).then(() => {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                });
+            } else {
+                Swal.fire({
+                    title: 'กรุณากรอกให้ครบถ้วน!',
+                    text: 'กรุณาเลือกให้ครบก่อนบันทึก',
+                    icon: 'warning',
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: "#3a363a",
+                });
+            }
+        }
+
+
+        // เพิ่มการจัดการคลิกสำหรับปุ่มที่มี class 'btn'
+        document.querySelectorAll('.btn').forEach(button => button.addEventListener('click', handleButtonClick));
+
+        // เพิ่มการจัดการคลิกสำหรับปุ่ม submit
+        document.getElementById('submit-btn').addEventListener('click', handleSubmitClick);
+    </script>
+</body>
+</html>
